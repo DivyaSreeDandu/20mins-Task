@@ -1,0 +1,15 @@
+A hash table implements an associative array(unordered) abstract data type that maps keys to values.
+Simple terms is a data structure that pairs keys with values.
+- uses hash function to compute an offset into an array for a given key , through which we find the desired value.
+- Space complexity - O(n)
+- Time - avg O(1), worst O(n)
+Don't store any duplicates 
+Each key is unique
+Unordered data structures - keys not stored in specific order
+
+A hash function takes in any key as its input. It then returns an integer representation of that key (i.e., the “hash”). The function’s output is deterministic (i.e., the same key should always generate the same hash output).
+
+The DBMS need not use a cryptographically secure hash function (e.g., SHA-256) because we do not need to worry about protecting the contents of keys. These hash functions are primarily used internally by the DBMS and thus information is not leaked outside of the system. In general, we only care about the hash function’s speed and collision rate.
+
+Static Probe Hashing
+- Looking for free slot by scanning down 
