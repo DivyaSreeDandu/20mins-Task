@@ -1,0 +1,55 @@
+**Linear Probe Hashing**
+- Most Basic, also the fastest
+- Looking for free slot by scanning down
+- Uses Circular Buffer Hash Table:
+   - Key Mapping:  
+     The hash function maps a key to a specific slot in the array.
+   - Insertion:
+    When slot is free, insert the key-value pair there.
+    If slot is occupied (collision), search the next slots (linearly) until a free slot is found.
+    If you reach the end of the array, loop back to the start.
+    
+   -  Lookup:
+    Check the slot where the key should go based on the hash function.
+    If the key isn’t there, continue searching subsequent slots.
+    Stop if you find the key or an empty slot.
+    
+  - Deletion:
+    Removing a key-value pair directly may cause lookup issues. 
+  - Should make sure the search process isn’t broken by managing slot states properly.
+  
+  Key Points:
+  Store both the key and value  in each slot to identify correct entries.
+  Search wraps around from the end of the array back to the start if needed.
+  Deletions require extra care to maintain lookup correctness.
+
+
+Example - 
+
+We have a hash table with **5 slots** (array of size 5).  
+Our hash function is:
+Considering 
+   hash(key) = key % 5
+Keys: 7, 12, 17
+
+Insert 7
+- hash(7) = 7 % 5 = 2 → Place (7, value) in slot 2.
+Insert 12
+- hash(12) = 12 % 5 = 2 → Can't insert
+- Now linearly searching for the next free slot → Place (12, value) in slot 3.
+Insert 17
+
+- hash(17) = 17 % 5 = 2 → Can't insert again
+- Since Slot 3 is also occupied with 12 previously → Place (17, value) in slot 4.
+
+Final Insertions
+
+Slot 0: Empty  
+
+Slot 1: Empty  
+
+Slot 2: (7, value)  
+
+Slot 3: (12, value)  
+
+Slot 4: (17, value)
