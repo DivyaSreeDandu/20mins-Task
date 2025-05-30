@@ -1,0 +1,59 @@
+**Dynamic Hashing**
+
+Static vs. Dynamic Hashing
+ Static Hashing
+ - Fixed table size.
+ - If the number of elements exceeds capacity, the table needs to be rebuilt.
+ Dynamic Hashing
+ - Resizes the table on demand.
+ - Adjusts to the number of elements without rebuilding the entire table.
+ - Different methods prioritize read or write performance.
+ 
+ **Dynamic Hashing Techniques**
+ 
+ - *Chained Hashing*: 
+ 
+ - Each slot in the hash table has a linked list of buckets.
+ - Insertion: Keys with the same hash go into the same linked list.
+ - Lookup: Hash the key to find the bucket and scan the list for the key.
+ - Handles overflow by adding to the chain.
+ 
+ - *Extendible Hashing*
+
+ - Improved Chained Hashing: Splits buckets when they overflow instead of growing chains.
+ - Multiple slots can point to the same bucket.
+ 
+ - *Key Features*:
+ 
+ - Global Depth: Tracks the number of bits used to divide all buckets.
+ - Local Depth: Tracks the number of bits used for a specific bucket.
+ 
+ - *Splitting a Bucket*:
+ - 
+ - If the bucket is full, it is split, and keys are redistributed.
+ - If the local depth < global depth, add a new bucket without changing the table size.
+ - If the local depth = global depth, double the table size and update the global depth.
+ 
+ - Linear Hashing
+
+ - Splits buckets gradually using a split pointer.
+ 
+ - How It Works:
+ 
+ - Overflow: 
+ 
+ - When a bucket overflows, split the bucket at the split pointer (not necessarily the overflowing one).
+ 
+ - New Bucket: Add a new slot and apply a new hash function to redistribute keys.
+ 
+ 
+ - Two Hash Functions:
+ 
+ - Use the original hash function if the split pointer hasn’t reached the key.
+ - Use the new hash function if the split pointer has passed the key.
+
+
+ - Splitting and Shrinking:
+ 
+ - When the pointer reaches the last slot, it resets to the start.
+ - If a bucket below the pointer is empty, it can be removed, and the table shrinks.
