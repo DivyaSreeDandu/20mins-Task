@@ -1,0 +1,34 @@
+
+Given a list of strings, group the anagrams together. An anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+Example Input:
+
+`words = ["eat", "tea", "tan", "ate", "nat", "bat"]`
+
+Example Output:
+
+`[["eat", "tea", "ate"], ["tan", "nat"], ["bat"]]`
+
+
+Solution:
+
+def group_anagrams(words):
+	groups = {}
+    
+    for word in words:
+        
+        sorted_key = ''.join(sorted(word))
+        if sorted_key not in groups:
+            groups[sorted_key] = []
+        groups[sorted_key].append(word)
+    return list(groups.values())
+
+words = "listen", "silent", "enlist", "rat", "tar", "art", "god", "dog"
+print(group_anagrams(words))
+
+
+Output:
+'listen', 'silent', 'enlist', 'rat', 'tar', 'art', 'god', 'dog'
+
+
+
