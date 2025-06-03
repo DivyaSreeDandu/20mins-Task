@@ -1,0 +1,58 @@
+Insertion
+
+To insert a new entry into a B+Tree, one must traverse down the tree and use the inner nodes to figure out which leaf node to insert the key into.
+
+1. Find correct leaf L.
+
+2. Add new entry into Lin sorted order:
+
+• If L has enough space, the operation is done.
+
+• Otherwise split L into two nodes Land L2. Redistribute entries evenly and copy up the middle key. Insert an entry pointing to L2 into the parent of L.
+
+3. To split an inner node, redistribute entries evenly, but push up the middle key.
+
+Deletion
+
+Whereas in inserts we occasionally had to split leaves when the tree got too full, if a deletion causes a tree
+
+to be less than half-full, we must merge in order to re-balance the tree.
+
+1. Find correct leaf L.
+
+2. Remove the entry:
+
+• If Lis at least half full, the operation is done.
+
+• Otherwise, you can try to redistribute, borrowing from the sibling.
+
+• If redistribution fails, merge Land the sibling.
+
+3. If a merge occurred, you must delete the entry in the parent pointing to L.
+Selection Conditions
+
+Because B+Trees are in sorted order, look ups have fast traversal and also do not require the entire key.
+
+The DBMS can use a B+Tree index if the query provides any of the attributes of the search key. This differs
+
+from a hash index, which requires all attributes in the search key.
+
+Duplicate Keys
+
+There are two approaches to duplicate keys in a B+Tree.
+
+The first approach is to append record IDs as part of the key. Since each tuple’s record ID is unique, this will ensure that all the keys are identifiable.
+
+The second approach is to allow leaf nodes to spill into overflow nodes that contain the duplicate keys.
+
+Although no redundant information is stored, this approach is more complex to maintain and modify.
+
+Clustered Indexes
+
+The table is stored in the sort order specified by the primary key, as either heap- or index-organized storage.
+
+Since some DBMSs always use a clustered index, they will automatically make a hidden row id primary key if a table doesn’t have an explicit one, but others cannot use them at all.
+
+Index Scan Page Sorting
+
+Since directly retrieving tuples from an unclustered index is inefficient, the DBMS can first figure out all the tuples that it needs and then sort them based on their page id. This way, each page will only need to be fetched exactly once.
