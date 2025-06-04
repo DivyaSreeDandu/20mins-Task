@@ -1,0 +1,80 @@
+**B+ Tree design**
+
+ 1. **Node Size**
+
+- **What are Nodes?**  
+    Nodes are like storage units in a B+Tree. Each node holds part of the data and helps organize it for quick access.
+    
+- **Why Does Node Size Matter?**
+    
+    - The size of each node affects how efficiently data can be read and written, especially when working with different storage systems.
+        
+    - Large nodes are better for **hard drives**, as they reduce the number of times the system needs to access the disk. Since disk access is slow, it’s better to read or write a large chunk of data at once. These nodes are often in the size range of **megabytes**.
+        
+    - Small nodes are better for **in-memory databases**, as they fit neatly into the **CPU cache**. These databases don’t rely on disks, so keeping nodes small (e.g., **512 bytes**) reduces fragmentation and speeds up data access.
+        
+- **Workload Considerations**:
+    
+    - For **point queries** (searching for specific values), smaller nodes are better. This avoids loading extra unnecessary data.
+        
+    - For **sequential scans** (retrieving large ranges of data), larger nodes are preferable because fewer fetches are needed.
+        
+
+---
+
+2. **Merge Threshold**
+
+- **What is Merging in B+Trees?**
+    
+    - When data is deleted, some nodes might not have enough data left to be efficient. To fix this, B+Trees merge these underfilled nodes with their neighbors to maintain balance.
+        
+- **Challenges with Merging**:
+    
+    - If merging is done too eagerly, it can lead to **thrashing**, where frequent merges and splits occur due to a rapid series of deletions and insertions. This wastes system resources.
+        
+    - Strict merging rules can make operations slower, especially in cases where a lot of changes happen in a short time.
+        
+- **Optimized Strategies**:
+    
+    - **Delayed Merging**: Instead of merging nodes immediately, the system waits and performs multiple merges at once. This reduces the overall time spent on merging and minimizes interruptions to the tree structure.
+        
+    - **Unbalanced Trees**: Some systems, like PostgreSQL, temporarily allow small nodes to exist without merging. They later rebuild the tree in a more efficient way when needed.
+        
+
+---
+
+3. **Variable Length Keys**
+
+- **What are Keys?**
+    
+    - Keys are the part of the data used to organize and search the tree. Most B+Trees use **fixed-length keys**, where all keys are the same size.
+        
+    - However, some databases deal with **variable-length keys**, where some keys are longer or shorter than others. Managing these can be tricky and may waste space if not handled properly.
+        
+- **How to Handle Variable-Length Keys?**
+    
+    1. **Pointers**:
+        
+        - Instead of storing the actual key, the tree stores a pointer to the key’s location.
+            
+        - This is useful in embedded systems with limited memory but can slow down operations because the system has to follow the pointer each time.
+            
+    2. **Variable-Length Nodes**:
+        
+        - Keys are stored directly in nodes, and nodes are allowed to have different sizes.
+            
+        - This approach is rarely used because managing nodes of different sizes adds complexity and overhead.
+            
+    3. **Padding**:
+        
+        - All keys are padded to the same size as the largest key.
+            
+        - While simple, this wastes a lot of memory, so it’s almost never used in practice.
+            
+    4. **Key Map/Indirection**:
+        
+        - Instead of storing keys directly, the tree uses an index to refer to a separate dictionary that stores the key-value pairs.
+            
+        - This approach saves space and makes point queries faster because the index directly points to the data.
+            
+        - For example, PostgreSQL uses this technique along with **overflow pages**. If a node becomes too full, the extra data is stored in additional pages.
